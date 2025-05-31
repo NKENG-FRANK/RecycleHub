@@ -1,0 +1,120 @@
+.sidebar {
+  width: 350px;
+  height: 100vh;
+  background-color: #e8f5e9; /* soft green background */
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: #2e7d32; /* forest green text */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+  border-right: 1px solid #c8e6c9;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1b5e20;
+  margin-bottom: 40px;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding-bottom: 400px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: #2e7d32;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.nav-item.active {
+  background-color: #a5d6a7;
+  color: #1b5e20;
+  font-weight: bold;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 25px;
+}
+
+.nav-item:hover {
+  background-color: #c8e6c9;
+  color: #1b5e20;
+}
+
+.icon {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #c8e6c9;
+  padding-top: 20px;
+  gap: 12px;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #66bb6a;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2e7d32;
+}
+
+.user-id {
+  font-size: 12px;
+  color: #66bb6a;
+}
+
+/********* right-side.css *********/
+.homepage {
+  display: flex;
+  overflow: hidden; /* prevent sidebar overflow issues */
+  height: 100vh; /* full viewport height */
+}
+
+.main-content {
+  flex: 1; /* takes all remaining space */
+  overflow-y: auto;
+  padding-left: 20px;
+  background-color: #f1f8e9;
+  font-family: "Segoe UI", sans-serif;
+  box-sizing: border-box;
+}
+
+.content-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  color: #2e7d32;
+}
+
+.content-section h2 {
+  margin-bottom: 10px;
+  font-size: 28px;
+  color: #1b5e20;
+}
+
+.content-section p {
+  font-size: 16px;
+  color: #4caf50;
+}
