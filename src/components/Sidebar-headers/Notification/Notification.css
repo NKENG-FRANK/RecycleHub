@@ -1,0 +1,93 @@
+.notification-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.notification-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2e7d32;
+  margin-bottom: 20px;
+}
+
+.note-card {
+  border-left: 6px solid;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.note-card.success {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+}
+
+.note-card.info {
+  border-color: #2196f3;
+  background-color: #e3f2fd;
+}
+
+.note-card.warning {
+  border-color: #ff9800;
+  background-color: #fff8e1;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-date {
+  font-size: 14px;
+  color: #666;
+}
+
+.note-message {
+  margin-top: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.dismiss-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+}
+
+.dismiss-btn:hover {
+  color: #000;
+}
+
+.no-notifications {
+  font-size: 16px;
+  color: #999;
+}
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
