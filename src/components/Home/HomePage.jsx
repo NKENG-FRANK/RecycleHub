@@ -95,7 +95,7 @@ export default function HomePage() {
           />
           <NavItem
             icon={<FaFileAlt />}
-            label="Notification"
+            label="Natification"
             activeItem={activeItem}
             setActiveItem={setActiveItem}
           />
