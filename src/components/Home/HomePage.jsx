@@ -13,6 +13,7 @@ import Notification from "../Sidebar-headers/Notification/Notification";
 import Profile from "../Sidebar-headers/Profile/Profile";
 import Support from "../Sidebar-headers/Support/Support";
 import Tutorial from "../Sidebar-headers/Tutorials/Tutorial";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 export default function HomePage() {
   const [activeItem, setActiveItem] = useState("Dashboard");
@@ -67,7 +68,7 @@ export default function HomePage() {
   return (
     <div className="homepage">
       <div className="sidebar">
-        <div className="logo">♻️RECYCLE-HUB♻️</div>
+        <div className="logo"> ♻️RECYCLE♻️</div>
         <nav className="nav-menu">
           <NavItem
             icon={<FaHome />}
@@ -106,6 +107,8 @@ export default function HomePage() {
             setActiveItem={setActiveItem}
           />
         </nav>
+
+        <NavItem icon={<FaArrowRightLong />} label="Logout" />
       </div>
 
       {/* Right Side Content */}
