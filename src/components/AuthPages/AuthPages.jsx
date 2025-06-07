@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./AuthPages.css";
 import logo from "../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthPages({ setCurrentPage }) {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ export default function AuthPages({ setCurrentPage }) {
     termsAccepted: false,
   });
 
+  const navigate = useNavigate();
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -103,7 +105,11 @@ export default function AuthPages({ setCurrentPage }) {
                     </a>
                   </div>
 
-                  <button type="submit" className="auth-button">
+                  <button
+                    type="submit"
+                    className="auth-button"
+                    onClick={() => navigate("/home")}
+                  >
                     Sign In
                   </button>
                 </form>
