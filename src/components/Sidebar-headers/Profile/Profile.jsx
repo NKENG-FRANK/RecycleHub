@@ -1,123 +1,128 @@
-import React, { useEffect, useState } from 'react';
-import './Profile.css';
+import React, { useState } from "react";
+import "./Profile.css";
 
-const defaultProfile = {
-  name: 'John Doe',
-  email: 'johndoe@example.com',
-  phone: '+1234567890',
-  avatar: '',
-  backupEmail: '',
-  role: 'User',
-  joinDate: '2024-01-01T10:00:00Z',
-  verified: true,
-  lastLogin: new Date().toISOString(),
-  sold: 120,
-  bought: 45,
-  language: 'en',
-  sound: true,
-  notifications: true,
-  twoFA: false,
-  googleLinked: true,
-};
+export default function Profile() {
+  const [formData, setFormData] = useState({
+    firstName: "Sara",
+    lastName: "Tancredi",
+    email: "Sara.Tancredi@gmail.com",
+    phone: "(+98) 9123728167",
+    location: "New York, USA",
+    postalCode: "23728167",
+  });
 
-const Profile = () => {
-  const [user, setUser] = useState(defaultProfile);
-  const [editing, setEditing] = useState(false);
-  const [password, setPassword] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('userProfile');
-    if (saved) setUser(JSON.parse(saved));
-  }, []);
-
-  const saveUser = (updated) => {
-    setUser(updated);
-    localStorage.setItem('userProfile', JSON.stringify(updated));
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleEdit = () => setEditing(true);
-  const handleSave = () => {
-    setEditing(false);
-    saveUser(user);
-    alert('Profile updated');
-  };
-
-  const downloadData = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(user));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', 'profile_data.json');
-    downloadAnchor.click();
-  };
-
-  const handleAvatar = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const updated = { ...user, avatar: reader.result };
-      saveUser(updated);
-    };
-    reader.readAsDataURL(e.target.files[0]);
+  const handleSaveChanges = () => {
+    console.log("Saving changes:", formData);
+    // Add your save logic here
   };
 
   return (
-    <div className={`profile-page ${darkMode ? 'dark' : ''}`}>
-      <h2>👤 User Profile</h2>
-
-      <div className="profile-section">
-        <img src={user.avatar || '/default-avatar.png'} alt="Avatar" className="avatar" />
-        <input type="file" onChange={handleAvatar} />
-      </div>
-
-      <div className="profile-info">
-        {editing ? (
-          <>
-            <input value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
-            <input value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
-            <input value={user.phone} onChange={(e) => setUser({ ...user, phone: e.target.value })} />
-            <input placeholder="Backup Email" value={user.backupEmail} onChange={(e) => setUser({ ...user, backupEmail: e.target.value })} />
-            <button onClick={handleSave}>Save</button>
-          </>
-        ) : (
-          <>
-            <p><b>Name:</b> {user.name}</p>
-            <p><b>Email:</b> {user.email}</p>
-            <p><b>Phone:</b> {user.phone}</p>
-            <p><b>Backup Email:</b> {user.backupEmail || 'Not set'}</p>
-            <p><b>Role:</b> {user.role}</p>
-            <p><b>Joined:</b> {new Date(user.joinDate).toLocaleString()}</p>
-            <p><b>Verified:</b> {user.verified ? 'Yes' : 'No'}</p>
-            <p><b>Last Login:</b> {new Date(user.lastLogin).toLocaleString()}</p>
-            <p><b>Language:</b> {user.language}</p>
-            <p><b>Google Linked:</b> {user.googleLinked ? 'Yes' : 'No'}</p>
-            <p><b>Progress:</b> {`${Math.floor((Object.values(user).filter(Boolean).length / 12) * 100)}% Complete`}</p>
-            <button onClick={handleEdit}>Edit Profile</button>
-          </>
-        )}
-
-        <div className="profile-activity">
-          <p><b>Sold:</b> {user.sold} kg</p>
-          <p><b>Bought:</b> {user.bought} kg</p>
+    <div className="profile-container">
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Profile Header */}
+        <div className="profile-header">
+          <div className="profile-avatar">
+            <img
+              src="https://i.pinimg.com/736x/6e/52/14/6e5214b1bd71d4ac8c4350301bea7593.jpg"
+              alt="Profile Avatar"
+              className="avatar-image"
+            />
+            <div className="avatar-status"></div>
+          </div>
+          <div className="profile-info">
+            <h2>
+              {formData.firstName} {formData.lastName}
+            </h2>
+            <p className="profile-location">{formData.location}</p>
+          </div>
         </div>
 
-        <div className="profile-settings">
-          <label><input type="checkbox" checked={user.notifications} onChange={(e) => saveUser({ ...user, notifications: e.target.checked })} /> Notifications</label>
-          <label><input type="checkbox" checked={user.sound} onChange={(e) => saveUser({ ...user, sound: e.target.checked })} /> Sound</label>
-          <label><input type="checkbox" checked={user.twoFA} onChange={(e) => saveUser({ ...user, twoFA: e.target.checked })} /> Two-Factor Auth</label>
-          <label><input type="checkbox" checked={darkMode} onChange={(e) => setDarkMode(e.target.checked)} /> Dark Mode</label>
-        </div>
+        {/* Profile Form */}
+        <div className="profile-form">
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Name</label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                className="form-input"
+              />
+            </div>
+          </div>
 
-        <div className="profile-extra">
-          <p><b>App Version:</b> 1.0.0</p>
-          <p><b>Device:</b> {navigator.userAgent}</p>
-          <button onClick={downloadData}>Download Data (JSON)</button>
-          <button onClick={() => alert('Password Changed')}>Change Password</button>
-          <button onClick={() => alert('Account Deleted')}>Delete Account</button>
-          <button onClick={() => alert('QR Code Coming Soon')}>Show QR Code</button>
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className="form-input"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">Location</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+                className="form-input"
+                placeholder="e.g. New York, USA"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Postal Code</label>
+              <input
+                type="text"
+                name="postalCode"
+                value={formData.postalCode}
+                onChange={handleInputChange}
+                className="form-input"
+              />
+            </div>
+          </div>
+
+          <button className="save-button" onClick={handleSaveChanges}>
+            Save Changes
+          </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default Profile;
+}
