@@ -1,5 +1,6 @@
 import * as Entity from './entity'
 import axios from 'axios'
+
 /**
  * This should be used as :
  * import * as API from '...path/to/api'
@@ -70,7 +71,7 @@ async function customFetch(method, url, data) {
 
 export const IAM = {
     async connect(phone = '') {
-        return eval(await customFetch('POST', routes.iam.connect, {phone}))
+        return Entity.Connection.fromObject(await customFetch('POST', routes.iam.connect, {phone}))
     },
     async verify(id = 0, code = '') {
         return Entity.User.fromObject(await customFetch('POST', routes.iam.verify, {id, code}))
