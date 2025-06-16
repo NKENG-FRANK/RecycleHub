@@ -8,13 +8,14 @@ import Notification from "./components/Sidebar-headers/Notification/Notification
 import Profile from "./components/Sidebar-headers/Profile/Profile";
 import Support from "./components/Sidebar-headers/Support/Support";
 import Tutorial from "./components/Sidebar-headers/Tutorials/Tutorial";
+import OtpPage from "./components/OtpPage/OtpPage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<AuthPages />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<DashBoard />} />
         <Route path="/marketboard" element={<MarketPlace />} />
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Profile" element={<Profile />} />
         <Route path="/support" element={<Support />} />
         <Route path="/tutorials" element={<Tutorial />} />
+        <Route path="/otp" element={<OtpPage />} />
       </Routes>
     </Router>
   );

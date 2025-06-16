@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function AuthPages({ setCurrentPage }) {
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     phoneNumber: "",
     rememberMe: false,
     termsAccepted: false,
@@ -52,6 +53,22 @@ export default function AuthPages({ setCurrentPage }) {
                       className="form-input"
                       placeholder="Enter your name"
                       value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email" className="form-label">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="form-input"
+                      placeholder="Enter your email"
+                      value={formData.email}
                       onChange={handleInputChange}
                       required
                     />
@@ -108,7 +125,7 @@ export default function AuthPages({ setCurrentPage }) {
                   <button
                     type="submit"
                     className="auth-button"
-                    onClick={() => navigate("/home")}
+                    onClick={() => navigate("/otp")}
                   >
                     Sign In
                   </button>

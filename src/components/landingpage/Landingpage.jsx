@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "./LandingPage.css";
-import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
