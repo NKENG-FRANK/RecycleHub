@@ -7,7 +7,7 @@ import {
   MessageCircle,
   Send,
 } from "lucide-react";
-import "./dashboard.css";
+import "./DashBoard.css";
 
 const Dashboard = () => {
   return (
