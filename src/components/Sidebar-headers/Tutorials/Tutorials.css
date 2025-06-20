@@ -1,0 +1,58 @@
+:root {
+  --primary-color: #4caf50;
+  --primary-hover: #388e3c;
+  --light-bg: #f9fafb;
+  --border-color: #e0e0e0;
+  --text-color: #333;
+  --muted-text: #666;
+  --card-radius: 10px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.Tutorial{
+  display: flex;
+}
+.left-panel {
+  width: 320px;
+  padding: 24px;
+  background-color: white;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.choice{
+    font-size: 12px;
+    background: var(--primary-color);
+    margin-inline: 2px;
+    padding-inline: 10px;
+    border-radius: 10px;
+    margin-block: 2px;
+    transition: background-color 0.5s;
+    
+}
+.choice:hover{
+    background-color: var(--primary-hover);
+
+}
+.suggestion{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin-block: 10px;
+    width: 250px;
+    background: #ffffff;
+    padding-bottom: 90%;
+    
+}
+.suggestion::before{
+    content: "";
+    height: 1px;
+    position: absolute;
+    background: var(--borderG);
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+}
+.search-section{
+ padding: 1rem 2rem;
+}

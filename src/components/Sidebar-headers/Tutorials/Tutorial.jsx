@@ -1,19 +1,49 @@
-import React from "react";
+import React from 'react'
+import './Tutorials.css';
 
-export default function Tutorial() {
+const Tutorial = () => {
+  const suggestion=[
+  {id: 1, name: 'Organic'},
+  {id: 2, name: 'Recycle'},
+  {id: 3, name: 'Wastedisposal'},
+  {id: 4, name: 'others'},
+];
+
+
   return (
-    <div>
-      <h1>Tutorial</h1>
-      <p>
-        Welcome to the tutorial section! Here you can find guides and resources
-        to help you understand how to use the application effectively.
-      </p>
-      <ul>
-        <li>Getting Started</li>
-        <li>How to Recycle</li>
-        <li>Tracking Your Progress</li>
-        <li>Community Engagement</li>
-      </ul>
+    <>
+    <div className="Tutorial">
+      <aside className='left-panel'>
+        <section className=''>
+          <h1>Search Tutorial</h1>
+          <input type="text" placeholder='input category'/>
+          <div className="suggestion">
+            {suggestion.map((suggest)=>(
+              <div className="choice" key={suggest.id}>
+                {suggest.name}
+              </div>
+            ))}
+        </div>
+        </section>
+        <hr  className='divider'/>
+        <section className='Add-tutorial'>
+          
+          <form action="">
+            <h2>Add Tutorial</h2>
+            <input type="text" placeholder='Title' className='Title'/>
+            <input type="text" className="decryption" />
+            <input type="url" />
+            <button className='file'>upload file</button>
+            <button className='submit' type='submit'>Submit</button>
+          </form>
+          
+        </section>
+      </aside>
+
+      <main></main>
     </div>
-  );
+    </>
+  )
 }
+
+export default Tutorial
