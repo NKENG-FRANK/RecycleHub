@@ -1,6 +1,7 @@
 :root {
   --primary-color: #4caf50;
   --primary-hover: #388e3c;
+  --light-green: #e8f5e9;
   --light-bg: #f9fafb;
   --border-color: #e0e0e0;
   --text-color: #333;
@@ -8,9 +9,12 @@
   --card-radius: 10px;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-.Tutorial{
+
+.Tutorial {
   display: flex;
+  width: 100%;
 }
+
 .left-panel {
   width: 320px;
   padding: 24px;
@@ -19,40 +23,211 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  flex-shrink: 0;
 }
-.choice{
-    font-size: 12px;
-    background: var(--primary-color);
-    margin-inline: 2px;
-    padding-inline: 10px;
-    border-radius: 10px;
-    margin-block: 2px;
-    transition: background-color 0.5s;
-    
-}
-.choice:hover{
-    background-color: var(--primary-hover);
 
+.choice {
+  font-size: 12px;
+  background: var(--light-green);
+  color: var(--text-color);
+  margin: 4px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
 }
-.suggestion{
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    margin-block: 10px;
-    width: 250px;
-    background: #ffffff;
-    padding-bottom: 90%;
-    
+
+.choice:hover {
+  background-color: #dcedc8;
 }
-.suggestion::before{
-    content: "";
-    height: 1px;
-    position: absolute;
-    background: var(--borderG);
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
+
+.choice.selected {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: 1px solid var(--primary-hover);
 }
-.search-section{
- padding: 1rem 2rem;
+
+.suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  margin-block: 10px;
+  width: 100%;
+  background: #ffffff;
+  padding-bottom: 0;
+  align-items: flex-start;
+}
+
+.suggestion::before {
+  content: none;
+}
+
+.search-section {
+  padding: 0;
+}
+
+.file {
+  background: rgba(0, 0, 255, 0.684);
+  color: #ffffff;
+  padding: 0.3rem 0.6rem;
+  margin-block: 2px;
+}
+
+.file:hover {
+  background: #000;
+}
+
+.Tuto-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.find {
+  font-weight: 600;
+  padding: 8px 15px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.find:hover {
+  background-color: var(--primary-hover);
+}
+
+.find:active {
+  opacity: 0.7;
+}
+
+.main-content {
+  flex-grow: 1;
+  min-width: 700px;
+  padding: 24px;
+  background-color: var(--light-bg);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  align-content: flex-start;
+}
+
+.tutorial-card {
+  background-color: white;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-title {
+  padding: 15px;
+  margin-bottom: 0;
+  color: var(--text-color);
+}
+
+.card-description {
+  padding: 0 15px 15px;
+  color: var(--muted-text);
+  font-size: 0.9em;
+  flex-grow: 1;
+}
+
+.see-more {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  border-radius: 0 0 var(--card-radius) var(--card-radius);
+}
+
+.see-more:hover {
+  background-color: var(--primary-hover);
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload-label {
+  display: block;
+  margin-top: 10px;
+}
+
+.file-upload-label .file {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1em;
+  text-align: center;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.file-upload-label .file:hover {
+  background-color: #0056b3;
+}
+
+.upload-image-button {
+  background-color: #333 !important;
+}
+
+.upload-image-button:hover {
+  background-color: #555 !important;
+}
+
+.uploaded-content {
+  padding: 15px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 10px;
+}
+
+.uploaded-file-name,
+.uploaded-image-name {
+  font-size: 0.9em;
+  color: var(--muted-text);
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.Tuto-form input[type="text"],
+.Tuto-form input[type="url"],
+.Tuto-form .description {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.Tuto-form .submit {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.Tuto-form .submit:hover {
+  background-color: var(--primary-hover);
 }
