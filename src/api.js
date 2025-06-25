@@ -1,5 +1,5 @@
 import * as Entity from './entity'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 /**
  * This should be used as :
@@ -52,21 +52,25 @@ const routes = {
 }
 async function customFetch(method, url, data) {
     // console.log('Sending ', data)
-    const response = await axios({
-        baseUrl: server_address,
-        data,
-        headers: {
-            "Content-Type": data instanceof FormData ? "multipart/form-data" : undefined,
-            "hasAuthorization": authorization ? true : undefined,
-            "Authorization": authorization ? authorization : undefined
-        },
-        method,
-        params: method == 'GET' ? data : undefined,
-        url
-    })
-    const { success, data : _data, error: _err} = response
-    if(success) return _data
-    else { console.log(_err); throw new Error(_err)}
+    try{
+        const response = await axios({
+            baseUrl: server_address,
+            data,
+            headers: {
+                "Content-Type": data instanceof FormData ? "multipart/form-data" : undefined,
+                "hasAuthorization": authorization ? true : undefined,
+                "Authorization": authorization ? authorization : undefined
+            },
+            method,
+            params: method == 'GET' ? data : undefined,
+            url
+        })
+        return response.data.data
+    }
+    catch(error) {
+        console.log(error.response.data.error)
+        throw new Error(error.response.data.error)
+    }
 }
 
 export const IAM = {
