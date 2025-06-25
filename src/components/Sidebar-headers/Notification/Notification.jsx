@@ -1,51 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import './Notification.css';
+import React, { useEffect, useState } from "react";
+import HomePage from "../../Home/HomePage";
+import "./Notification.css";
 
 const mockFetchNotifications = () => {
   return Promise.resolve([
     {
       id: 1,
       date: new Date().toISOString(),
-      message: 'You sold 75kg of Plastic to GreenRecyclers.',
-      type: 'success',
+      message: "You sold 75kg of Plastic to GreenRecyclers.",
+      type: "success",
       read: false,
       pinned: false,
     },
     {
       id: 2,
       date: new Date().toISOString(),
-      message: 'Reminder: Complete your profile.',
-      type: 'warning',
+      message: "Reminder: Complete your profile.",
+      type: "warning",
       read: false,
       pinned: false,
     },
     {
       id: 3,
       date: new Date().toISOString(),
-      message: 'New recycling tips available in Tutorials.',
-      type: 'info',
+      message: "New recycling tips available in Tutorials.",
+      type: "info",
       read: false,
       pinned: false,
     },
   ]);
 };
 
-const Notification = () => {
+export default function Notification() {
   const [notifications, setNotifications] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [toasts, setToasts] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const audio = new Audio('/ding.mp3'); // optional sound file
+  const audio = new Audio("/ding.mp3");
 
   useEffect(() => {
-    const saved = localStorage.getItem('notifications');
+    const saved = localStorage.getItem("notifications");
     if (saved) {
       setNotifications(JSON.parse(saved));
     } else {
       mockFetchNotifications().then((data) => {
         setNotifications(data);
-        localStorage.setItem('notifications', JSON.stringify(data));
-        showToast('Fetched new notifications');
+        localStorage.setItem("notifications", JSON.stringify(data));
+        showToast("Fetched new notifications");
         if (soundEnabled) audio.play();
       });
     }
@@ -53,20 +54,20 @@ const Notification = () => {
 
   const saveAndSet = (data) => {
     setNotifications(data);
-    localStorage.setItem('notifications', JSON.stringify(data));
+    localStorage.setItem("notifications", JSON.stringify(data));
   };
 
-  const markAllAsRead = () => {
-    const updated = notifications.map((n) => ({ ...n, read: true }));
-    saveAndSet(updated);
-    showToast('All notifications marked as read');
+  const formatDate = (iso) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString() + " " + d.toLocaleTimeString();
   };
 
-  const clearAll = () => {
-    if (window.confirm('Are you sure you want to clear all notifications?')) {
-      saveAndSet([]);
-      showToast('All notifications cleared');
-    }
+  const showToast = (message) => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 3000);
   };
 
   const toggleRead = (id) => {
@@ -79,7 +80,7 @@ const Notification = () => {
   const dismiss = (id) => {
     const updated = notifications.filter((n) => n.id !== id);
     saveAndSet(updated);
-    showToast('Notification dismissed');
+    showToast("Notification dismissed");
   };
 
   const togglePin = (id) => {
@@ -89,83 +90,94 @@ const Notification = () => {
     saveAndSet(updated);
   };
 
-  const showToast = (message) => {
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, message }]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3000);
+  const markAllAsRead = () => {
+    const updated = notifications.map((n) => ({ ...n, read: true }));
+    saveAndSet(updated);
+    showToast("All marked as read");
   };
 
-  const formatDate = (iso) => {
-    const d = new Date(iso);
-    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+  const clearAll = () => {
+    if (window.confirm("Are you sure you want to clear all notifications?")) {
+      saveAndSet([]);
+      showToast("All notifications cleared");
+    }
   };
 
   const filtered = notifications
-    .filter((n) =>
-      n.message.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter((n) => n.message.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => b.pinned - a.pinned || new Date(b.date) - new Date(a.date));
 
   return (
-    <div className="notif-page">
-      <h2 className="notif-title">🔔 Notifications</h2>
+    <div className="notification-wrapper">
+      <HomePage />
 
-      <div className="notif-controls">
-        <input
-          type="text"
-          placeholder="Search notifications..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={markAllAsRead}>Mark all as read</button>
-        <button onClick={clearAll}>Clear all</button>
-        <label>
-          <input
-            type="checkbox"
-            checked={soundEnabled}
-            onChange={(e) => setSoundEnabled(e.target.checked)}
-          />
-          Sound
-        </label>
-      </div>
-
-      <div className="notif-list">
-        {filtered.length === 0 && (
-          <div className="notif-empty">No notifications found.</div>
-        )}
-        {filtered.map((note) => (
-          <div
-            key={note.id}
-            className={`notif-card ${note.type} ${
-              note.read ? 'read' : 'unread'
-            }`}
-          >
-            <div className="notif-pin" onClick={() => togglePin(note.id)}>
-              📌 {note.pinned ? 'Unpin' : 'Pin'}
-            </div>
-            <div className="notif-date">{formatDate(note.date)}</div>
-            <div className="notif-message">{note.message}</div>
-            <div className="notif-buttons">
-              <button onClick={() => toggleRead(note.id)}>
-                {note.read ? 'Mark Unread' : 'Mark Read'}
-              </button>
-              <button onClick={() => dismiss(note.id)}>Dismiss ✖</button>
-            </div>
+      <main className="notification-content">
+        <header className="notification-header">
+          <h1>🔔 Notifications</h1>
+          <div className="notification-actions">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button onClick={markAllAsRead}>Mark All Read</button>
+            <button onClick={clearAll}>Clear All</button>
+            <label>
+              <input
+                type="checkbox"
+                checked={soundEnabled}
+                onChange={(e) => setSoundEnabled(e.target.checked)}
+              />
+              Sound
+            </label>
           </div>
-        ))}
-      </div>
+        </header>
 
-      <div className="toast-container">
-        {toasts.map((t) => (
-          <div key={t.id} className="toast">
-            {t.message}
-          </div>
-        ))}
-      </div>
+        <section className="notification-grid">
+          {filtered.length === 0 && (
+            <p className="notification-empty">No notifications found.</p>
+          )}
+
+          {filtered.map((note) => (
+            <div
+              key={note.id}
+              className={`notification-card ${note.type} ${
+                note.read ? "read" : "unread"
+              }`}
+            >
+              <div className="notification-icon">
+                {note.type === "success" && "✅"}
+                {note.type === "warning" && "⚠️"}
+                {note.type === "info" && "ℹ️"}
+              </div>
+
+              <div className="notification-body">
+                <div className="notification-date">{formatDate(note.date)}</div>
+                <div className="notification-message">{note.message}</div>
+              </div>
+
+              <div className="notification-controls">
+                <button onClick={() => toggleRead(note.id)}>
+                  {note.read ? "Unread" : "Read"}
+                </button>
+                <button onClick={() => togglePin(note.id)}>
+                  {note.pinned ? "Unpin" : "Pin"}
+                </button>
+                <button onClick={() => dismiss(note.id)}>✖</button>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <div className="toast-container">
+          {toasts.map((t) => (
+            <div key={t.id} className="toast">
+              {t.message}
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
-};
-
-export default Notification;
+}

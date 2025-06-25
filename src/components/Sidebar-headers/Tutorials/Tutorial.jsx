@@ -1,216 +1,246 @@
-import React, { useState } from 'react';
-import './Tutorials.css';
-import { FaCamera } from 'react-icons/fa';
+import React, { useState, useCallback } from "react";
+import "./Tutorials.css";
+import { FaCamera } from "react-icons/fa";
+import HomePage from "../../Home/HomePage";
+
+const CATEGORY_OPTIONS = ["Organic", "Recycle", "Waste Disposal", "Others"];
 
 const Tutorial = () => {
   const [selectedChoices, setSelectedChoices] = useState([]);
   const [tutorials, setTutorials] = useState([]);
-  const [newTutorial, setNewTutorial] = useState({
-    title: '',
-    description: '',
-    imageUrl: '',
-    uploadedFile: null,
-    uploadedFileType: '',
-  });
   const [showFile, setShowFile] = useState({});
+  const [newTutorial, setNewTutorial] = useState({
+    title: "",
+    description: "",
+    imageUrl: "",
+    uploadedFile: null,
+    uploadedFileType: "",
+  });
 
-  const suggestion = [
-    { id: 1, name: 'Organic' },
-    { id: 2, name: 'Recycle' },
-    { id: 3, name: 'Waste Disposal' },
-    { id: 4, name: 'Others' },
-  ];
+  const toggleChoice = useCallback((choice) => {
+    setSelectedChoices((prev) =>
+      prev.includes(choice)
+        ? prev.filter((c) => c !== choice)
+        : [...prev, choice]
+    );
+  }, []);
 
-  const handleChoiceClick = (choiceName) => {
-    setSelectedChoices((prevSelectedChoices) => {
-      if (prevSelectedChoices.includes(choiceName)) {
-        return prevSelectedChoices.filter((name) => name !== choiceName);
-      } else {
-        return [...prevSelectedChoices, choiceName];
-      }
-    });
-  };
-
-  const handleFindClick = () => {
-    console.log('Selected Categories:', selectedChoices);
-  };
-
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
-    setNewTutorial((prevTutorial) => ({
-      ...prevTutorial,
-      [name]: value,
+    setNewTutorial((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const handleImageUpload = useCallback((e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    setNewTutorial((prev) => ({
+      ...prev,
+      imageUrl,
     }));
-  };
+  }, []);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = useCallback((e) => {
     const file = e.target.files[0];
-    if (file) {
-      setNewTutorial((prevTutorial) => ({
-        ...prevTutorial,
-        uploadedFile: file,
-        uploadedFileType: file.type.includes('video') ? 'video' : file.type.includes('text') ? 'text' : file.type.includes('pdf') ? 'pdf' : 'other',
-      }));
-    }
-  };
+    if (!file) return;
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setNewTutorial((prevTutorial) => ({
-        ...prevTutorial,
-        imageUrl: imageUrl,
-      }));
-    }
-  };
+    const type = file.type.includes("video")
+      ? "video"
+      : file.type.includes("text")
+      ? "text"
+      : file.type.includes("pdf")
+      ? "pdf"
+      : "other";
+
+    setNewTutorial((prev) => ({
+      ...prev,
+      uploadedFile: file,
+      uploadedFileType: type,
+    }));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newTutorial.title && newTutorial.description && newTutorial.imageUrl) {
-      setTutorials((prevTutorials) => [...prevTutorials, { ...newTutorial, id: Date.now() }]);
-      setNewTutorial({
-        title: '',
-        description: '',
-        imageUrl: '',
-        uploadedFile: null,
-        uploadedFileType: '',
-      });
-      e.target.reset();
-    } else {
-      alert('Please fill in all tutorial details (Title, Description, and upload an Article Image).');
+
+    const { title, description, imageUrl } = newTutorial;
+    if (!title || !description || !imageUrl) {
+      alert("Please fill in all required fields.");
+      return;
     }
+
+    setTutorials((prev) => [...prev, { ...newTutorial, id: Date.now() }]);
+
+    setNewTutorial({
+      title: "",
+      description: "",
+      imageUrl: "",
+      uploadedFile: null,
+      uploadedFileType: "",
+    });
+
+    e.target.reset();
   };
 
-  const handleSeeMoreClick = (id) => {
-    setShowFile((prevShowFile) => ({
-      ...prevShowFile,
-      [id]: !prevShowFile[id],
+  const toggleSeeMore = (id) => {
+    setShowFile((prev) => ({
+      ...prev,
+      [id]: !prev[id],
     }));
   };
 
   return (
-    <>
-      <div className="Tutorial">
-        <aside className="left-panel">
-          <section className="">
-            <h1>Search Tutorial</h1>
-            <input type="text" placeholder="Input category" />
-            <div className="suggestion">
-              {suggestion.map((suggest) => (
-                <div
-                  className={`choice ${selectedChoices.includes(suggest.name) ? 'selected' : ''}`}
-                  key={suggest.id}
-                  onClick={() => handleChoiceClick(suggest.name)}
-                >
-                  {suggest.name}
-                </div>
-              ))}
-            </div>
-            <button className="find" onClick={handleFindClick}>
-              Find
+    <div className="Tutorial">
+      {/* Sidebar */}
+      <HomePage />
+      <aside className="left-panel">
+        <section>
+          <h1>Search Tutorial</h1>
+          <input type="text" placeholder="Input category" />
+          <div className="suggestion">
+            {CATEGORY_OPTIONS.map((name) => (
+              <div
+                key={name}
+                className={`choice ${
+                  selectedChoices.includes(name) ? "selected" : ""
+                }`}
+                onClick={() => toggleChoice(name)}
+              >
+                {name}
+              </div>
+            ))}
+          </div>
+          <button className="find" onClick={() => console.log(selectedChoices)}>
+            Find
+          </button>
+        </section>
+
+        <hr className="divider" />
+
+        {/* Add Tutorial Form */}
+        <section className="Add-tutorial">
+          <form className="Tuto-form" onSubmit={handleSubmit}>
+            <h2>Add Tutorial</h2>
+
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              className="Title"
+              value={newTutorial.title}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="description"
+              placeholder="Description"
+              className="description"
+              value={newTutorial.description}
+              onChange={handleInputChange}
+            />
+
+            {/* Image Upload */}
+            <label className="file-upload-label upload-image-label">
+              <input
+                id="article-image-upload"
+                type="file"
+                className="file-input"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+              <button
+                type="button"
+                className="file upload-image-button"
+                onClick={() =>
+                  document.getElementById("article-image-upload").click()
+                }
+              >
+                <FaCamera style={{ marginRight: 8 }} /> Upload Image
+              </button>
+            </label>
+            {newTutorial.imageUrl && (
+              <p className="uploaded-image-name">Image uploaded</p>
+            )}
+
+            {/* File Upload */}
+            <label className="file-upload-label">
+              <input
+                id="file-upload"
+                type="file"
+                className="file-input"
+                accept="video/*, text/*, application/pdf"
+                onChange={handleFileUpload}
+              />
+              <button
+                type="button"
+                className="file"
+                onClick={() => document.getElementById("file-upload").click()}
+              >
+                Upload File
+              </button>
+            </label>
+            {newTutorial.uploadedFile && (
+              <p className="uploaded-file-name">
+                {newTutorial.uploadedFile.name}
+              </p>
+            )}
+
+            <button type="submit" className="submit">
+              Submit
             </button>
-          </section>
-          <hr className="divider" />
-          <section className="Add-tutorial">
-            <form onSubmit={handleSubmit} className="Tuto-form">
-              <h2>Add Tutorial</h2>
-              <input
-                type="text"
-                placeholder="Title"
-                className="Title"
-                name="title"
-                value={newTutorial.title}
-                onChange={handleInputChange}
+          </form>
+        </section>
+      </aside>
+
+      {/* Main Content */}
+      <main className="main-content">
+        {tutorials.map((tutorial) => (
+          <div key={tutorial.id} className="tutorial-card">
+            {tutorial.imageUrl && (
+              <img
+                src={tutorial.imageUrl}
+                alt={tutorial.title}
+                className="card-image"
               />
-              <input
-                type="text"
-                className="description"
-                placeholder="Description"
-                name="description"
-                value={newTutorial.description}
-                onChange={handleInputChange}
-              />
+            )}
+            <h3 className="card-title">{tutorial.title}</h3>
+            <p className="card-description">{tutorial.description}</p>
 
-              <label htmlFor="article-image-upload" className="file-upload-label upload-image-label">
-                <input
-                  id="article-image-upload"
-                  type="file"
-                  className="file-input"
-                  onChange={handleImageUpload}
-                  accept="image/*"
-                />
-                <button type="button" className="file upload-image-button" onClick={() => document.getElementById('article-image-upload').click()}>
-                  <FaCamera style={{ marginRight: '8px' }} /> Upload Image
-                </button>
-              </label>
-              {newTutorial.imageUrl && (
-                <p className="uploaded-image-name">Selected: Image uploaded</p>
-              )}
+            <button
+              className="see-more"
+              onClick={() => toggleSeeMore(tutorial.id)}
+            >
+              {showFile[tutorial.id] ? "Hide File" : "See More"}
+            </button>
 
-              <label htmlFor="file-upload" className="file-upload-label">
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="file-input"
-                  onChange={handleFileUpload}
-                  accept="video/*, text/*, application/pdf"
-                />
-                <button type="button" className="file" onClick={() => document.getElementById('file-upload').click()}>
-                  Upload File
-                </button>
-              </label>
-              {newTutorial.uploadedFile && (
-                <p className="uploaded-file-name">Selected: {newTutorial.uploadedFile.name}</p>
-              )}
-
-              <button className="submit" type="submit">
-                Submit
-              </button>
-            </form>
-          </section>
-        </aside>
-
-        <main className="main-content">
-          
-          {tutorials.map((tutorial) => (
-            <div className="tutorial-card" key={tutorial.id}>
-              {tutorial.imageUrl && (
-                <img src={tutorial.imageUrl} alt={tutorial.title} className="card-image" />
-              )}
-              <h3 className="card-title">
-                <b>{tutorial.title}</b>
-              </h3>
-              <p className="card-description">{tutorial.description}</p>
-              <button className="see-more" onClick={() => handleSeeMoreClick(tutorial.id)}>
-                {showFile[tutorial.id] ? 'Hide File' : 'See More'}
-              </button>
-              {showFile[tutorial.id] && tutorial.uploadedFile && (
-                <div className="uploaded-content">
-                  {tutorial.uploadedFileType === 'video' && (
-                    <video controls width="100%">
-                      <source src={URL.createObjectURL(tutorial.uploadedFile)} type={tutorial.uploadedFile.type} />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
-                  {(tutorial.uploadedFileType === 'text' || tutorial.uploadedFileType === 'pdf') && (
-                    <iframe
+            {showFile[tutorial.id] && tutorial.uploadedFile && (
+              <div className="uploaded-content">
+                {tutorial.uploadedFileType === "video" && (
+                  <video controls width="100%">
+                    <source
                       src={URL.createObjectURL(tutorial.uploadedFile)}
-                      width="100%"
-                      height="300px"
-                      title="Uploaded File"
-                    ></iframe>
-                  )}
-                  {tutorial.uploadedFileType === 'other' && (
-                    <p>File type not directly displayable: {tutorial.uploadedFile.name}</p>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </main>
-      </div>
-    </>
+                      type={tutorial.uploadedFile.type}
+                    />
+                  </video>
+                )}
+                {(tutorial.uploadedFileType === "text" ||
+                  tutorial.uploadedFileType === "pdf") && (
+                  <iframe
+                    src={URL.createObjectURL(tutorial.uploadedFile)}
+                    width="100%"
+                    height="300"
+                    title="Tutorial File"
+                  ></iframe>
+                )}
+                {tutorial.uploadedFileType === "other" && (
+                  <p>Cannot preview: {tutorial.uploadedFile.name}</p>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </main>
+    </div>
   );
 };
 

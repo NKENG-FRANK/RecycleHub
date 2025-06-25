@@ -10,7 +10,7 @@ export default function OtpPage() {
     e.preventDefault();
     console.log("OTP submitted:", otp);
     // Handle OTP verification logic here
-    navigate("/home");
+    navigate("/marketboard");
   };
 
   return (
