@@ -1,158 +1,179 @@
-:root {
-  --primary-color: #4caf50;
-  --primary-hover: #388e3c;
-  --light-green: #e8f5e9;
-  --light-bg: #f9fafb;
-  --border-color: #e0e0e0;
-  --text-color: #333;
-  --muted-text: #666;
-  --card-radius: 10px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
+/* Container layout */
 .Tutorial {
   display: flex;
-  width: 100%;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f9fafb;
 }
 
-.left-panel {
-  width: 320px;
-  padding: 24px;
-  background-color: white;
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+/* Sidebar from HomePage */
+.Tutorial > :first-child {
+  width: 240px;
   flex-shrink: 0;
 }
 
-.choice {
-  font-size: 12px;
-  background: var(--light-green);
-  color: var(--text-color);
-  margin: 4px;
-  padding: 8px 15px;
-  border-radius: 20px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  cursor: pointer;
-  border: 1px solid transparent;
+.left-panel {
+  width: 450px;
 }
 
-.choice:hover {
-  background-color: #dcedc8;
+/* Search Section */
+.left-panel h1 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #10b981;
 }
 
-.choice.selected {
-  background-color: var(--primary-color);
-  color: #ffffff;
-  border: 1px solid var(--primary-hover);
+.left-panel input[type="text"] {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
+/* Suggestions (chips) */
 .suggestion {
   display: flex;
   flex-wrap: wrap;
-  margin-block: 10px;
-  width: 100%;
-  background: #ffffff;
-  padding-bottom: 0;
-  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.suggestion::before {
-  content: none;
+.choice {
+  padding: 0.4rem 0.8rem;
+  background: #f3f4f6;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.search-section {
-  padding: 0;
+.choice.selected {
+  background: #10b981;
+  color: #fff;
 }
 
-.file {
-  background: rgba(0, 0, 255, 0.684);
-  color: #ffffff;
-  padding: 0.3rem 0.6rem;
-  margin-block: 2px;
+/* Buttons */
+.find,
+.submit,
+.file,
+.upload-image-button {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.3s;
 }
 
-.file:hover {
-  background: #000;
+.find:hover,
+.submit:hover,
+.file:hover,
+.upload-image-button:hover {
+  background: #059669;
 }
 
+/* Divider */
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+/* Tutorial Form */
 .Tuto-form {
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
 }
 
-.find {
-  font-weight: 600;
-  padding: 8px 15px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.Tuto-form input[type="text"],
+.Tuto-form input[type="file"],
+.Tuto-form input[type="url"],
+.Tuto-form input[type="number"] {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
-.find:hover {
-  background-color: var(--primary-hover);
+.uploaded-image-name,
+.uploaded-file-name {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: -5px;
 }
 
-.find:active {
-  opacity: 0.7;
-}
-
+/* Main Tutorial Cards Area */
 .main-content {
-  flex-grow: 1;
-  min-width: 700px;
-  padding: 24px;
-  background-color: var(--light-bg);
+  flex: 1;
+  padding: 2rem;
   display: grid;
+  gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  align-content: flex-start;
+  background-color: #f9fafb;
 }
 
+/* Card */
 .tutorial-card {
-  background-color: white;
-  border-radius: var(--card-radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.3s ease;
+  height: 300px;
+}
+
+.tutorial-card:hover {
+  transform: translateY(-4px);
 }
 
 .card-image {
   width: 100%;
-  height: 200px;
+  height: 160px;
   object-fit: cover;
+  border-radius: 8px;
 }
 
 .card-title {
-  padding: 15px;
-  margin-bottom: 0;
-  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .card-description {
-  padding: 0 15px 15px;
-  color: var(--muted-text);
-  font-size: 0.9em;
-  flex-grow: 1;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+/* File display */
+.uploaded-content {
+  margin-top: 1rem;
+  background: #f3f4f6;
+  padding: 0.75rem;
+  border-radius: 8px;
 }
 
 .see-more {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 15px;
+  background: transparent;
+  border: 1px solid #10b981;
+  color: #10b981;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  border-radius: 0 0 var(--card-radius) var(--card-radius);
+  transition: all 0.3s;
 }
 
 .see-more:hover {
-  background-color: var(--primary-hover);
+  background: #10b981;
+  color: white;
 }
 
 .file-input {
@@ -196,10 +217,6 @@
   padding: 15px;
   border-top: 1px solid var(--border-color);
   margin-top: 10px;
-  height: 2500px;
-  width: 1200px;
-  z-index: 99999;
-  position: absolute;
 }
 
 .uploaded-file-name,

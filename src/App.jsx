@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./components/landingpage/Landingpage";
-import HomePage from "./components/Home/HomePage";
 import AuthPages from "./components/AuthPages/AuthPages";
-import DashBoard from "./components/Sidebar-headers/DashBoard/DashBoard";
 import MarketPlace from "./components/Sidebar-headers/MarketPlace/MarketPlace";
 import Notification from "./components/Sidebar-headers/Notification/Notification";
 import Profile from "./components/Sidebar-headers/Profile/Profile";
@@ -16,8 +14,6 @@ function App() {
       <Routes>
         <Route path="/auth" element={<AuthPages />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/dashboard" element={<DashBoard />} />
         <Route path="/marketboard" element={<MarketPlace />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/Profile" element={<Profile />} />

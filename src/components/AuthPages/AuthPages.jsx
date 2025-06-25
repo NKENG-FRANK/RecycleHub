@@ -24,6 +24,7 @@ export default function AuthPages({ setCurrentPage }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login submitted:", formData);
+    navigate("/otp");
     // Handle login logic here
   };
 
@@ -42,22 +43,6 @@ export default function AuthPages({ setCurrentPage }) {
                 </div>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label htmlFor="name" className="form-label">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="form-input"
-                      placeholder="Enter your name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-
                   <div className="form-group">
                     <label htmlFor="email" className="form-label">
                       Email
@@ -94,21 +79,6 @@ export default function AuthPages({ setCurrentPage }) {
                     <label className="checkbox-label">
                       <input
                         type="checkbox"
-                        name="rememberMe"
-                        checked={formData.rememberMe}
-                        onChange={handleInputChange}
-                      />
-                      <span className="checkbox-text">Remember me</span>
-                    </label>
-                    <a href="#" className="forgot-link">
-                      Forgot Password?
-                    </a>
-                  </div>
-
-                  <div className="form-options">
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
                         name="termsAccepted"
                         checked={formData.termsAccepted}
                         onChange={handleInputChange}
@@ -122,11 +92,7 @@ export default function AuthPages({ setCurrentPage }) {
                     </a>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="auth-button"
-                    onClick={() => navigate("/otp")}
-                  >
+                  <button type="submit" className="auth-button">
                     Sign In
                   </button>
                 </form>

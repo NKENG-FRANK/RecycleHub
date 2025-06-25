@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./MarketPlace.css";
+import HomePage from "../../Home/HomePage";
+import { useNavigate } from "react-router-dom";
 
 const MarketPlace = () => {
   const [products, setProducts] = useState([]);
@@ -15,6 +17,8 @@ const MarketPlace = () => {
     price: "",
     image: "",
   });
+
+  const navigate = useNavigate();
 
   const handleAddProduct = (e) => {
     e.preventDefault();
@@ -42,6 +46,7 @@ const MarketPlace = () => {
 
   return (
     <div className="marketplace">
+      <HomePage />
       <aside className="left-panel">
         <section className="search-section">
           <h2>Find a Deal</h2>

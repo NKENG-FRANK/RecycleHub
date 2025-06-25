@@ -1,22 +1,15 @@
-import React from 'react';
-import './Card.css';
+import React from "react";
+import "./Card.css";
 
-const Card = () => {
+export default function Card({ name, role, image, description }) {
   return (
-    <div className="card-container">
-      <div className="card-header">
-        <div className="profile-photo-wrapper">
-          <div className="profile-photo">photo</div>
-        </div>
-      </div>
-      <div className="card-content">
-        <h2 className="name">EBIMBE EKONGOLO</h2>
-        <p className="title">Front-end Developer</p>
-        <p className="description">Am a developer am doing my best.aaaaaaaaaaaaaaaaaaaaaaaa</p>
-        <button className="contact-button">Contact Me</button>
+    <div className="card">
+      <img src={image} alt={name} className="card-img" />
+      <div className="card-body">
+        <h3>{name}</h3>
+        <p className="role">{role}</p>
+        <p className="description">{description}</p>
       </div>
     </div>
   );
-};
-
-export default Card;
+}

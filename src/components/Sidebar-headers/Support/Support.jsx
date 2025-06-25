@@ -1,53 +1,85 @@
 import React from "react";
+import HomePage from "../../Home/HomePage.jsx";
 import Card from "./Card";
-import './Support.css'
+import "./Support.css";
+
 export default function Support() {
-  const developpers=[
+  const developers = [
     {
       id: 1,
       name: "EBIMBE EKONGOLO",
-      role: "Frontend developper",
-      text: "",
+      role: "Frontend Developer",
       url: "1.png",
-      decryption: "nlksdsklcmklsdmkskldklsdmckcdkmdcsmlcdmkcklskldsklmcd"
+      description:
+        "Passionate about building intuitive and responsive user interfaces with React.",
     },
     {
-      id: 1,
+      id: 2,
       name: "Nindjio Abraham",
-      role: "Fullstack developper",
-      text: "",
+      role: "Fullstack Developer",
       url: "2.png",
-      decryption: "nlksdsklcmklsdmkskldklsdmckcdkmdcsmlcdmkcklskldsklmcd"
+      description:
+        "Expert in full stack architecture, integrating frontend and backend systems seamlessly.",
     },
     {
-      id: 1,
-      name: "EBIMBE EKONGOLO",
-      role: "Frontend developper",
-      text: "",
+      id: 3,
+      name: "Mbele Tim",
+      role: "Backend Developer",
       url: "3.png",
-      decryption: "nlksdsklcmklsdmkskldklsdmckcdkmdcsmlcdmkcklskldsklmcd"
+      description:
+        "Loves optimizing APIs and managing server-side logic for scalable applications.",
     },
     {
-      id: 1,
-      name: "EBIMBE EKONGOLO",
-      role: "Frontend developper",
-      text: "",
-      url: "1.png",
-      decryption: "nlksdsklcmklsdmkskldklsdmckcdkmdcsmlcdmkcklskldsklmcd"
+      id: 4,
+      name: "Clarisse N.",
+      role: "UI/UX Designer",
+      url: "4.png",
+      description:
+        "Designs delightful user experiences and ensures visual consistency across the platform.",
+    },
+    {
+      id: 5,
+      name: "Jean K.",
+      role: "Mobile Developer",
+      url: "5.png",
+      description:
+        "Focuses on mobile responsiveness and native app development for all platforms.",
+    },
+    {
+      id: 6,
+      name: "Awa Diallo",
+      role: "QA Engineer",
+      url: "6.png",
+      description:
+        "Ensures that every feature is tested, verified, and bug-free before release.",
     },
   ];
+
   return (
-    <div className="support">
-      
+    <div className="support-wrapper">
+      <HomePage />
+      <main className="support-main">
+        <h1>📣 Meet the Recycle Hub Dev Team</h1>
+        <p className="support-intro">
+          Welcome to the Support page. Our team is dedicated to delivering a
+          clean, scalable, and user-friendly recycling platform. Whether you're
+          a user, vendor, or curious visitor, know that behind this product is a
+          diverse team of developers and designers committed to sustainability
+          and technology.
+        </p>
 
-
-        <h1>RYCYCLE HUB Developpers</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis nihil molestias deleniti excepturi rerum vitae voluptatem sunt, officiis placeat eaque impedit reiciendis quaerat recusandae enim. Eum cupiditate at illum. Laudantium.</p>
-      
-        <div>
-          <Card/>
-
+        <div className="card-row">
+          {developers.map((dev) => (
+            <Card
+              key={dev.id}
+              name={dev.name}
+              role={dev.role}
+              image={dev.url}
+              description={dev.description}
+            />
+          ))}
         </div>
+      </main>
     </div>
   );
 }
