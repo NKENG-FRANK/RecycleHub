@@ -1,0 +1,8 @@
+.support{
+    padding: 20px 40px;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}

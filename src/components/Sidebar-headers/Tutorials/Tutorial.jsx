@@ -172,6 +172,7 @@ const Tutorial = () => {
         </aside>
 
         <main className="main-content">
+          
           {tutorials.map((tutorial) => (
             <div className="tutorial-card" key={tutorial.id}>
               {tutorial.imageUrl && (
