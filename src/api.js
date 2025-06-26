@@ -33,7 +33,7 @@ const routes = {
         }
     },
     categories: {
-        read: '/category/read'
+        read: '/categories'
     },
     document: {
         read: '/document/read',
@@ -111,7 +111,7 @@ export const Document = {
         return await customFetch('GET', routes.document.content, {id})
     },
     async search(text = '', categories = []) {
-        return [...await customFetch('GET', routes.document.search, {text, categories})].map(Entity.Notification.fromObject)
+        return [...await customFetch('GET', routes.document.search, {text, "categories": categories})].map(Entity.Document.fromObject)
     }
 }
 export const Categories = {

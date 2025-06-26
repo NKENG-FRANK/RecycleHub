@@ -1,14 +1,71 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./Tutorials.css";
 import { FaCamera } from "react-icons/fa";
 import HomePage from "../../Home/HomePage";
+import * as API from "../../../api";
+import * as Entity from "../../../entity";
+import Modal from "../Modal";
+import Logo from "../../../assets/logo.png";
+import TutorialRender from "./Tutorial.Content";
 
-const CATEGORY_OPTIONS = ["Organic", "Recycle", "Waste Disposal", "Others"];
+// const CATEGORY_OPTIONS = ["Organic", "Recycle", "Waste Disposal", "Others"];
 
-const Tutorial = () => {
-  const [selectedChoices, setSelectedChoices] = useState([]);
+function TutorialCard({tutorial = (new Entity.Document).toObject(), onCardClick}) {
+  // console.log(tutorial)
+  return (
+    <div key={tutorial.id} className="tutorial-card">
+      <img
+        src={tutorial.imageUrl !== undefined ? tutorial.imageUrl : Logo}
+        style={{objectFit: 'scale-down'}}
+        alt={tutorial.name}
+        className="card-image"
+      />
+      <h3 className="card-title">{tutorial.name}</h3>
+      <p className="card-description">{tutorial.description.length <= 45 ? tutorial.description : tutorial.description.slice(0, 41)}...</p>
+
+      <button className="see-more" onClick={() => onCardClick(tutorial)}>
+        See More
+      </button>
+
+      {/* {showFile[tutorial.id] && tutorial.uploadedFile && (
+        <div className="uploaded-content">
+          {tutorial.uploadedFileType === "video" && (
+            <video controls width="100%">
+              <source
+                src={URL.createObjectURL(tutorial.uploadedFile)}
+                type={tutorial.uploadedFile.type}
+              />
+            </video>
+          )}
+          {(tutorial.uploadedFileType === "text" ||
+            tutorial.uploadedFileType === "pdf") && (
+            <iframe
+              src={URL.createObjectURL(tutorial.uploadedFile)}
+              width="100%"
+              height="300"
+              title="Tutorial File"
+            ></iframe>
+          )}
+          {tutorial.uploadedFileType === "other" && (
+            <p>Cannot preview: {tutorial.uploadedFile.name}</p>
+          )}
+        </div>
+      )} */}
+    </div>
+  )
+}
+
+function Tutorial() {
+  const [searchCategories, setSearchCategories] = useState([]);
+  const [searchText, setSearchText] = useState("")
+  const [searchProcessing, setSearchProcessing] = useState(false)
+  const [CATEGORY_OPTIONS, setCategories] = useState([])
+
   const [tutorials, setTutorials] = useState([]);
-  const [showFile, setShowFile] = useState({});
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const [selectedTutorial, setSelectedTutorial] = useState(null);
+  
+  const [proposalCats, setProposalCats] = useState([])
   const [newTutorial, setNewTutorial] = useState({
     title: "",
     description: "",
@@ -17,8 +74,25 @@ const Tutorial = () => {
     uploadedFileType: "",
   });
 
-  const toggleChoice = useCallback((choice) => {
-    setSelectedChoices((prev) =>
+  const toggleSearchCategory = useCallback((choice) => {
+    setSearchCategories((prev) =>
+      prev.includes(choice)
+        ? prev.filter((c) => c !== choice)
+        : [...prev, choice]
+    );
+  }, []);
+
+  const handleSearch = useCallback(() => {
+    setSearchProcessing(true)
+    API.Document.search(searchText, searchCategories).then(setTutorials).catch().finally(() => setSearchProcessing(false))
+  }, [searchText, searchCategories])
+
+  const onTutorialCardClick = useCallback( (tutorial = (new Entity.Document).toObject()) => {
+    API.Document.content(tutorial.id).then(setSelectedTutorial).then(() => setIsTutorialOpen(true))
+  }, [] )
+
+  const toggleProposalCategory = useCallback((choice) => {
+    setProposalCats((prev) =>
       prev.includes(choice)
         ? prev.filter((c) => c !== choice)
         : [...prev, choice]
@@ -82,36 +156,34 @@ const Tutorial = () => {
     e.target.reset();
   };
 
-  const toggleSeeMore = (id) => {
-    setShowFile((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
+  useEffect(() => {
+    API.Categories.read().then(setCategories)
+  }, [])
 
   return (
     <div className="Tutorial">
       {/* Sidebar */}
       <HomePage />
+      <>
       <aside className="left-panel">
         <section>
           <h1>Search Tutorial</h1>
-          <input type="text" placeholder="Input category" />
+          <input type="text" onChange={ evt => { const { value } = evt.target; setSearchText(value)}} value={searchText} placeholder="Search" />
           <div className="suggestion">
-            {CATEGORY_OPTIONS.map((name) => (
+            {CATEGORY_OPTIONS.map((cat, index) => (
               <div
-                key={name}
+                key={index}
                 className={`choice ${
-                  selectedChoices.includes(name) ? "selected" : ""
+                  searchCategories.includes(cat.id) ? "selected" : ""
                 }`}
-                onClick={() => toggleChoice(name)}
+                onClick={() => toggleSearchCategory(cat.id)}
               >
-                {name}
+                {cat.name}
               </div>
             ))}
           </div>
-          <button className="find" onClick={() => console.log(selectedChoices)}>
-            Find
+          <button className="find" onClick={handleSearch}>
+            { searchProcessing ? "Searching..." : "Search" }
           </button>
         </section>
 
@@ -121,7 +193,19 @@ const Tutorial = () => {
         <section className="Add-tutorial">
           <form className="Tuto-form" onSubmit={handleSubmit}>
             <h2>Add Tutorial</h2>
-
+            <div className="suggestion">
+              {CATEGORY_OPTIONS.map((cat, index) => (
+                <div
+                  key={index}
+                  className={`choice ${
+                    proposalCats.includes(cat.id) ? "selected" : ""
+                  }`}
+                  onClick={() => toggleProposalCategory(cat.id)}
+                >
+                  {cat.name}
+                </div>
+              ))}
+            </div>
             <input
               type="text"
               name="title"
@@ -194,52 +278,12 @@ const Tutorial = () => {
 
       {/* Main Content */}
       <main className="main-content">
-        {tutorials.map((tutorial) => (
-          <div key={tutorial.id} className="tutorial-card">
-            {tutorial.imageUrl && (
-              <img
-                src={tutorial.imageUrl}
-                alt={tutorial.title}
-                className="card-image"
-              />
-            )}
-            <h3 className="card-title">{tutorial.title}</h3>
-            <p className="card-description">{tutorial.description}</p>
-
-            <button
-              className="see-more"
-              onClick={() => toggleSeeMore(tutorial.id)}
-            >
-              {showFile[tutorial.id] ? "Hide File" : "See More"}
-            </button>
-
-            {showFile[tutorial.id] && tutorial.uploadedFile && (
-              <div className="uploaded-content">
-                {tutorial.uploadedFileType === "video" && (
-                  <video controls width="100%">
-                    <source
-                      src={URL.createObjectURL(tutorial.uploadedFile)}
-                      type={tutorial.uploadedFile.type}
-                    />
-                  </video>
-                )}
-                {(tutorial.uploadedFileType === "text" ||
-                  tutorial.uploadedFileType === "pdf") && (
-                  <iframe
-                    src={URL.createObjectURL(tutorial.uploadedFile)}
-                    width="100%"
-                    height="300"
-                    title="Tutorial File"
-                  ></iframe>
-                )}
-                {tutorial.uploadedFileType === "other" && (
-                  <p>Cannot preview: {tutorial.uploadedFile.name}</p>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+        {tutorials.map((tutorial, index) => (<TutorialCard tutorial={tutorial} key={index} onCardClick={onTutorialCardClick}/>))}
       </main>
+      </>
+      <Modal isOpen={isTutorialOpen} onClose={() => { setIsTutorialOpen(false); setSelectedTutorial(null) }}>
+        <TutorialRender content={selectedTutorial}/>
+      </Modal>
     </div>
   );
 };
