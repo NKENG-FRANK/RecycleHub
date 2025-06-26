@@ -24,7 +24,6 @@ function LandingPage() {
   }, [])
 
   return (
-    return (
     <div className="landing-page">
       <main className="main">
         <div className="container">
