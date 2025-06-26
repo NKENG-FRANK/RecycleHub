@@ -15,11 +15,12 @@ import axios, { AxiosError } from 'axios'
  */
 
 const server_address = 'https://recycle-hub-backend.onrender.com'
+// const server_address = 'http://localhost:3000'
 
 const routes = {
     iam : {
         connect : '/iam/login',
-        verify: '/iam/verify',
+        verify: '/iam/validate',
     },
     user : {
         read: '/user/read',
@@ -54,7 +55,7 @@ async function customFetch(method, url, data) {
     // console.log('Sending ', data)
     try{
         const response = await axios({
-            baseUrl: server_address,
+            baseURL: server_address,
             data,
             headers: {
                 "Content-Type": data instanceof FormData ? "multipart/form-data" : undefined,
@@ -74,11 +75,11 @@ async function customFetch(method, url, data) {
 }
 
 export const IAM = {
-    async connect(phone = '') {
-        return Entity.Connection.fromObject(await customFetch('POST', routes.iam.connect, {phone}))
+    async connect(phone = '', mail = '') {
+        return Entity.Connection.fromObject(await customFetch('POST', routes.iam.connect, {phone, mail}))
     },
-    async verify(id = 0, code = '') {
-        return Entity.User.fromObject(await customFetch('POST', routes.iam.verify, {id, code}))
+    async verify(connection = (new Entity.Connection).toObject()) {
+        return Entity.User.fromObject(await customFetch('POST', routes.iam.verify, connection))
     },
 }
 

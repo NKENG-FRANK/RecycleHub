@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import "./Profile.css";
 import HomePage from "../../Home/HomePage";
+import * as API from "../../../api";
+import {KVUSR} from "../../../kv";
 
 export default function Profile() {
+  const user = KVUSR.getUser()
   const [formData, setFormData] = useState({
-    firstName: "Sara",
-    lastName: "Tancredi",
-    email: "Sara.Tancredi@gmail.com",
-    phone: "(+98) 9123728167",
-    location: "New York, USA",
-    postalCode: "23728167",
+    id: user.id,
+    name: user.name,
+    contact: user.contact,
+    contact2: user.contact2
   });
+  const [processing, setProcessing] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +23,14 @@ export default function Profile() {
   };
 
   const handleSaveChanges = () => {
-    console.log("Saving changes:", formData);
+    // console.log("Saving changes:", formData);
+    setProcessing(true);
+    API.User.update(formData)
+    .then( (updated) => {
+      KVUSR.setUser(updated.toObject())
+    })
+    .catch()
+    .finally(() => setProcessing(false))
   };
 
   return (
@@ -40,9 +49,9 @@ export default function Profile() {
             </div>
             <div className="profile-info">
               <h2>
-                {formData.firstName} {formData.lastName}
+                {formData.name}
               </h2>
-              <p className="profile-location">{formData.location}</p>
+              {/* <p className="profile-location">{formData.location}</p> */}
             </div>
           </div>
 
@@ -51,43 +60,43 @@ export default function Profile() {
               <div className="form-group">
                 <label>Name</label>
                 <input
-                  name="firstName"
-                  value={formData.firstName}
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label>Full Name</label>
                 <input
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Phone</label>
+                <label>Primary Contact (i.e Phone)</label>
                 <input
                   type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  name="contact"
+                  value={formData.contact}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Secondary Contact (i.e Email)</label>
+                <input
+                  type="email"
+                  name="contact2"
+                  value={formData.contact2}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
 
-            <div className="form-row">
+            {/* <div className="form-row">
               <div className="form-group">
                 <label>Location</label>
                 <input
@@ -104,10 +113,10 @@ export default function Profile() {
                   onChange={handleInputChange}
                 />
               </div>
-            </div>
+            </div> */}
 
             <button className="save-button" onClick={handleSaveChanges}>
-              Save Changes
+              { processing ? "Processing..." : "Save Changes" }
             </button>
           </div>
         </div>

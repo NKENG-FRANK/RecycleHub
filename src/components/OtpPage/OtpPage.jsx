@@ -1,16 +1,35 @@
 import { useState } from "react";
 import "../AuthPages/AuthPages.css"; // Reuse existing styles
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as API from "../../api";
+import { KVUSR } from "../../kv";
 
 export default function OtpPage() {
   const [otp, setOtp] = useState("");
+  const [processing, setProcessing] = useState(false)
+  const [wrongOTP, setWrongOTP] = useState(false)
   const navigate = useNavigate();
+
+  const location = useLocation()
+  const {connection} = location.state || {}
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("OTP submitted:", otp);
-    // Handle OTP verification logic here
-    navigate("/marketboard");
+    setProcessing(true);
+    setWrongOTP(false);
+    const params = {...connection};
+    params.code = otp;
+    API.IAM.verify(params)
+    .then( user => {
+      KVUSR.setUser(user.toObject())
+      API.setAuth(user.token)
+      navigate("/marketboard")
+    })
+    .catch(err => {
+      if(err.message === 'WrongOTP') setWrongOTP(true)
+    })
+  .finally(() => setProcessing(false))
   };
 
   return (
@@ -45,9 +64,9 @@ export default function OtpPage() {
                       required
                     />
                   </div>
-
+                  { wrongOTP && <p style={{color: "red"}}>WrongOTP</p> }
                   <button type="submit" className="auth-button">
-                    Confirm OTP
+                    { processing ? "Processing..." : "Confirm OTP" }
                   </button>
                 </form>
 

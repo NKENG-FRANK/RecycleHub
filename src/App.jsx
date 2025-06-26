@@ -7,8 +7,13 @@ import Profile from "./components/Sidebar-headers/Profile/Profile";
 import Support from "./components/Sidebar-headers/Support/Support";
 import Tutorial from "./components/Sidebar-headers/Tutorials/Tutorial";
 import OtpPage from "./components/OtpPage/OtpPage";
+import { useEffect } from "react";
+import { defaultAsyncConfig } from "./kv";
 
 function App() {
+  useEffect(() => {
+    defaultAsyncConfig()
+  }, [])
   return (
     <Router>
       <Routes>

@@ -11,7 +11,8 @@ export const DocumentTypes = {
 
 export const NotificationTypes = {
     REQUEST_ADDED: 1,
-    PROPOSAL_ACCEPTED: 2
+    PROPOSAL_ACCEPTED: 2,
+    OTHER: 4,
 }
 
 export class Category {

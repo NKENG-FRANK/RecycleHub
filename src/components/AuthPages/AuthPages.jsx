@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./AuthPages.css";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import * as API from "../../api"
 
 export default function AuthPages({ setCurrentPage }) {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ export default function AuthPages({ setCurrentPage }) {
     rememberMe: false,
     termsAccepted: false,
   });
+  const [processing, setProcessing] = useState(false)
 
   const navigate = useNavigate();
   const handleInputChange = (e) => {
@@ -24,7 +26,13 @@ export default function AuthPages({ setCurrentPage }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login submitted:", formData);
-    navigate("/otp");
+    setProcessing(true);
+    API.IAM.connect(formData.phoneNumber, formData.email)
+    .then(connection => {
+      navigate("/otp", { state: {connection: connection.toObject() } });
+    })
+    .catch(console.log)
+    .finally(() => setProcessing(false))
     // Handle login logic here
   };
 
@@ -93,7 +101,7 @@ export default function AuthPages({ setCurrentPage }) {
                   </div>
 
                   <button type="submit" className="auth-button">
-                    Sign In
+                    { processing ? "Processing..." : "Sign In" }
                   </button>
                 </form>
               </div>

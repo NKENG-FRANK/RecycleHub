@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
+import { KVUSR } from "../../kv";
+import * as API from "../../api";
 
 function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -13,6 +15,13 @@ function LandingPage() {
     setIsVisible(true);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const onGetStarted = useCallback(() =>{
+    if(KVUSR.isUser()) {
+      API.setAuth(KVUSR.getUser().token);
+      navigate('/marketboard')
+    } else navigate("/auth")
+  }, [])
 
   return (
     <div className="landing-page">
@@ -40,7 +49,7 @@ function LandingPage() {
               <div className="btns">
                 <button className="read-more-btn">Read More</button>
 
-                <button className="start-btn" onClick={() => navigate("/auth")}>
+                <button className="start-btn" onClick={onGetStarted}>
                   Get Started
                 </button>
               </div>
