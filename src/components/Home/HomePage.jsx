@@ -55,7 +55,7 @@ function HomePage() {
           />
           <NavItem
             icon={<FaQuestionCircle />}
-            label="Support"
+            label="About Us"
             onClick={() => navigate("/support")}
           />
         </nav>

@@ -25,30 +25,23 @@ function LandingPage() {
 
   return (
     <div className="landing-page">
-      {/* Main Content */}
       <main className="main">
         <div className="container">
           <div className="hero">
             {/* Hero Content */}
-            <div
-              className={`hero-content ${
-                isVisible ? "animate-slide-in-left" : ""
-              }`}
-            >
+            <div className={`hero-content ${isVisible ? "animate-slide-in-left" : ""}`}>
               <h1 className="hero-title">
                 WASTE
                 <br />
                 RECYCLE
               </h1>
               <p className="hero-description">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                Welcome to Recycle Hub — your gateway to waste recovery and sustainable industry. 
+                Explore tutorials to transform waste into reusable material, and buy high-quality 
+                recycled waste in bulk for your business.
               </p>
               <div className="btns">
                 <button className="read-more-btn">Read More</button>
-
                 <button className="start-btn" onClick={onGetStarted}>
                   Get Started
                 </button>
@@ -56,12 +49,7 @@ function LandingPage() {
             </div>
 
             {/* Hero Illustration */}
-            <div
-              className={`hero-illustration ${
-                isVisible ? "animate-slide-in-right" : ""
-              }`}
-            >
-              {/* Background Shapes */}
+            <div className={`hero-illustration ${isVisible ? "animate-slide-in-right" : ""}`}>
               <div className="bg-shapes">
                 <div className="shape shape-1"></div>
                 <div className="shape shape-2"></div>
@@ -69,23 +57,21 @@ function LandingPage() {
                 <div className="shape shape-4"></div>
               </div>
 
-              {/* Main Illustration */}
               <div className="illustration-container">
-                {/* Recycling Bins */}
+                {/* Bins */}
                 <div className="bins">
-                  {/* Blue Bin */}
                   <div className="bin-container">
                     <div className="bin blue-bin">
                       <div className="recycle-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                           <path
                             fillRule="evenodd"
-                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 
+                            1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 
+                            1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 
+                            5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 
+                            11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 
+                            01.61-1.276z"
                             clipRule="evenodd"
                           />
                         </svg>
@@ -94,19 +80,18 @@ function LandingPage() {
                     <div className="bin-wheels blue-wheels"></div>
                   </div>
 
-                  {/* Green Bin */}
                   <div className="bin-container">
                     <div className="bin green-bin">
                       <div className="recycle-icon">
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                           <path
                             fillRule="evenodd"
-                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 
+                            1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 
+                            1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 
+                            5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 
+                            11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 
+                            01.61-1.276z"
                             clipRule="evenodd"
                           />
                         </svg>
@@ -116,7 +101,7 @@ function LandingPage() {
                   </div>
                 </div>
 
-                {/* Stylized Workers */}
+                {/* Workers */}
                 <div className="worker worker-1">
                   <div className="worker-head"></div>
                   <div className="worker-body"></div>

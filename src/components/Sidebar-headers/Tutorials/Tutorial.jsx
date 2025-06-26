@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import "./Tutorials.css";
 import { FaCamera } from "react-icons/fa";
 import HomePage from "../../Home/HomePage";
@@ -73,6 +73,8 @@ function Tutorial() {
     uploadedFile: null,
     uploadedFileType: "",
   });
+  const imageInputRef = useRef()
+  const fileInputRef = useRef()  
 
   const toggleSearchCategory = useCallback((choice) => {
     setSearchCategories((prev) =>
@@ -101,43 +103,41 @@ function Tutorial() {
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
-    setNewTutorial((prev) => ({ ...prev, [name]: value }));
+    setNewTutorial((prev) => ({ ...prev, [name]: value.trimStart() }));
   }, []);
 
   const handleImageUpload = useCallback((e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const imageUrl = URL.createObjectURL(file);
-    setNewTutorial((prev) => ({
-      ...prev,
-      imageUrl,
-    }));
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setNewTutorial((prev) => ({ ...prev, imageUrl }));
+    }
   }, []);
 
   const handleFileUpload = useCallback((e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files?.[0];
+    if (file) {
+      const type = file.type.includes("video")
+        ? "video"
+        : file.type.includes("text")
+        ? "text"
+        : file.type.includes("pdf")
+        ? "pdf"
+        : "other";
 
-    const type = file.type.includes("video")
-      ? "video"
-      : file.type.includes("text")
-      ? "text"
-      : file.type.includes("pdf")
-      ? "pdf"
-      : "other";
-
-    setNewTutorial((prev) => ({
-      ...prev,
-      uploadedFile: file,
-      uploadedFileType: type,
-    }));
+      file.preview = URL.createObjectURL(file);
+      setNewTutorial((prev) => ({
+        ...prev,
+        uploadedFile: file,
+        uploadedFileType: type,
+      }));
+    }
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { title, description, imageUrl } = newTutorial;
+
     if (!title || !description || !imageUrl) {
       alert("Please fill in all required fields.");
       return;
@@ -162,7 +162,6 @@ function Tutorial() {
 
   return (
     <div className="Tutorial">
-      {/* Sidebar */}
       <HomePage />
       <>
       <aside className="left-panel">
@@ -189,7 +188,6 @@ function Tutorial() {
 
         <hr className="divider" />
 
-        {/* Add Tutorial Form */}
         <section className="Add-tutorial">
           <form className="Tuto-form" onSubmit={handleSubmit}>
             <h2>Add Tutorial</h2>
@@ -213,6 +211,7 @@ function Tutorial() {
               className="Title"
               value={newTutorial.title}
               onChange={handleInputChange}
+              required
             />
             <input
               type="text"
@@ -221,12 +220,12 @@ function Tutorial() {
               className="description"
               value={newTutorial.description}
               onChange={handleInputChange}
+              required
             />
 
-            {/* Image Upload */}
             <label className="file-upload-label upload-image-label">
               <input
-                id="article-image-upload"
+                ref={imageInputRef}
                 type="file"
                 className="file-input"
                 accept="image/*"
@@ -235,9 +234,7 @@ function Tutorial() {
               <button
                 type="button"
                 className="file upload-image-button"
-                onClick={() =>
-                  document.getElementById("article-image-upload").click()
-                }
+                onClick={() => imageInputRef.current?.click()}
               >
                 <FaCamera style={{ marginRight: 8 }} /> Upload Image
               </button>
@@ -246,10 +243,9 @@ function Tutorial() {
               <p className="uploaded-image-name">Image uploaded</p>
             )}
 
-            {/* File Upload */}
             <label className="file-upload-label">
               <input
-                id="file-upload"
+                ref={fileInputRef}
                 type="file"
                 className="file-input"
                 accept="video/*, text/*, application/pdf"
@@ -258,7 +254,7 @@ function Tutorial() {
               <button
                 type="button"
                 className="file"
-                onClick={() => document.getElementById("file-upload").click()}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Upload File
               </button>
@@ -276,7 +272,6 @@ function Tutorial() {
         </section>
       </aside>
 
-      {/* Main Content */}
       <main className="main-content">
         {tutorials.map((tutorial, index) => (<TutorialCard tutorial={tutorial} key={index} onCardClick={onTutorialCardClick}/>))}
       </main>
