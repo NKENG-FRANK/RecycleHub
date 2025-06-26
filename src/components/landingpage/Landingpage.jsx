@@ -34,16 +34,11 @@ function LandingPage() {
                 companies building a sustainable future.
               </p>
               <div className="btns">
-                <button
-                  className="read-more-btn"
-                  onClick={() => navigate("/auth")}
-                >
-                  Explore Tutorials
-                </button>
-                <button className="start-btn" onClick={() => navigate("/auth")}>
-                  Shop Waste in Bulk
-                </button>
-              </div>
+                <button className="read-more-btn">Read More</button>
+
+                <button className="start-btn" onClick={onGetStarted}>
+                  Get Started
+                </button>              
             </div>
 
             <div
