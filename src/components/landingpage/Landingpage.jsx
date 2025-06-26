@@ -16,43 +16,41 @@ function LandingPage() {
 
   return (
     <div className="landing-page">
-      {/* Main Content */}
       <main className="main">
         <div className="container">
           <div className="hero">
-            {/* Hero Content */}
             <div
               className={`hero-content ${
                 isVisible ? "animate-slide-in-left" : ""
               }`}
             >
               <h1 className="hero-title">
-                WASTE
-                <br />
-                RECYCLE
+                Empowering Waste <br /> Recycling & Resale
               </h1>
               <p className="hero-description">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                Discover how to manage and recycle waste effectively through our
+                interactive tutorials. Purchase high-quality waste materials in
+                bulk for use as raw materials — perfect for startups and
+                companies building a sustainable future.
               </p>
               <div className="btns">
-                <button className="read-more-btn">Read More</button>
-
+                <button
+                  className="read-more-btn"
+                  onClick={() => navigate("/auth")}
+                >
+                  Explore Tutorials
+                </button>
                 <button className="start-btn" onClick={() => navigate("/auth")}>
-                  Get Started
+                  Shop Waste in Bulk
                 </button>
               </div>
             </div>
 
-            {/* Hero Illustration */}
             <div
               className={`hero-illustration ${
                 isVisible ? "animate-slide-in-right" : ""
               }`}
             >
-              {/* Background Shapes */}
               <div className="bg-shapes">
                 <div className="shape shape-1"></div>
                 <div className="shape shape-2"></div>
@@ -60,11 +58,8 @@ function LandingPage() {
                 <div className="shape shape-4"></div>
               </div>
 
-              {/* Main Illustration */}
               <div className="illustration-container">
-                {/* Recycling Bins */}
                 <div className="bins">
-                  {/* Blue Bin */}
                   <div className="bin-container">
                     <div className="bin blue-bin">
                       <div className="recycle-icon">
@@ -85,7 +80,6 @@ function LandingPage() {
                     <div className="bin-wheels blue-wheels"></div>
                   </div>
 
-                  {/* Green Bin */}
                   <div className="bin-container">
                     <div className="bin green-bin">
                       <div className="recycle-icon">
@@ -107,7 +101,6 @@ function LandingPage() {
                   </div>
                 </div>
 
-                {/* Stylized Workers */}
                 <div className="worker worker-1">
                   <div className="worker-head"></div>
                   <div className="worker-body"></div>
@@ -131,7 +124,6 @@ function LandingPage() {
                 </div>
               </div>
 
-              {/* Floating Elements */}
               <div className="floating-element float-1">
                 <div className="float-circle green-float"></div>
               </div>
@@ -141,6 +133,47 @@ function LandingPage() {
             </div>
           </div>
         </div>
+        <section className="about-section">
+          <div className="container about-container">
+            <h2 className="about-title">Why Recycle Hub?</h2>
+            <p className="about-description">
+              Recycle Hub is a modern platform designed to bridge the gap
+              between sustainable education and action. Whether you are an
+              individual learning how to manage household waste or a company
+              looking for raw materials to power your production, Recycle Hub
+              empowers you to make an impact.
+            </p>
+
+            <div className="features">
+              <div className="feature-card">
+                <h3>📚 Learn to Recycle</h3>
+                <p>
+                  Access detailed tutorials, articles, and videos that teach
+                  best practices for sorting, managing, and reducing waste — for
+                  both households and communities.
+                </p>
+              </div>
+
+              <div className="feature-card">
+                <h3>🏭 Buy Waste in Bulk</h3>
+                <p>
+                  Startups and eco-conscious companies can source recyclable
+                  materials in bulk at affordable rates, directly from local
+                  waste contributors and partners.
+                </p>
+              </div>
+
+              <div className="feature-card">
+                <h3>🌍 Build a Greener Future</h3>
+                <p>
+                  Join a growing community working toward sustainability,
+                  circular economy, and responsible production. Your actions
+                  matter — and we provide the tools to support them.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import "./MarketPlace.css";
 import HomePage from "../../Home/HomePage";
-import { useNavigate } from "react-router-dom";
+
+const CATEGORY_OPTIONS = ["Electronics", "Organic", "Plastic", "Metal"];
+const PRICE_RANGES = ["0-50", "51-150", "151+"];
+const QUANTITIES = ["0-50", "51-150", "151+"];
 
 const MarketPlace = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
   const [filters, setFilters] = useState({
-    category: "",
+    category: [],
     priceRange: "",
-    quantity: "",
   });
+
   const [newProduct, setNewProduct] = useState({
     name: "",
     specs: "",
@@ -18,143 +22,168 @@ const MarketPlace = () => {
     image: "",
   });
 
-  const navigate = useNavigate();
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setNewProduct((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
-  const handleAddProduct = (e) => {
-    e.preventDefault();
-    const product = {
-      ...newProduct,
-      id: Date.now(),
-      price: parseFloat(newProduct.price),
-      image: newProduct.image || "https://via.placeholder.com/250",
-    };
-    setProducts([...products, product]);
-    setNewProduct({ name: "", specs: "", price: "", image: "" });
-  };
+  const handleFilterChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
+  const handleAddProduct = useCallback(
+    (e) => {
+      e.preventDefault();
+      const newEntry = {
+        ...newProduct,
+        id: Date.now(),
+        price: parseFloat(newProduct.price),
+        image: newProduct.image || "https://via.placeholder.com/250",
+      };
+
+      setProducts((prev) => [...prev, newEntry]);
+
+      setNewProduct({ name: "", specs: "", price: "", image: "" });
+      e.target.reset();
+    },
+    [newProduct]
+  );
 
   const filteredProducts = products.filter((product) => {
     const nameMatch = product.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-    // Additional filter logic can go here
-    return nameMatch;
+    const categoryMatch =
+      filters.category.length === 0 ||
+      filters.category.includes(product.category?.toLowerCase());
+
+    return nameMatch && categoryMatch;
   });
 
   return (
     <div className="marketplace">
       <HomePage />
+
+      {/* Sidebar */}
       <aside className="left-panel">
+        {/* Search Filters */}
         <section className="search-section">
-          <h2>Find a Deal</h2>
+          <h2>Search For Deals</h2>
           <input
             type="text"
-            placeholder="Search products..."
-            aria-label="Search products"
+            placeholder="Search by name..."
+            aria-label="Search by name"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <select
-            name="category"
-            value={filters.category}
-            onChange={handleFilterChange}
-          >
-            <option value="">All Categories</option>
-            <option value="electronics">Electronics</option>
-            <option value="organic">Organic</option>
-            <option value="plastic">Plastic</option>
-            <option value="metal">Metalic</option>
-          </select>
+
+          <div className="suggestion">
+            {["Electronics", "Organic", "Plastic", "Metal"].map((cat) => {
+              const key = cat.toLowerCase();
+              const isSelected = filters.category.includes(key);
+
+              return (
+                <div
+                  key={cat}
+                  className={`choice ${isSelected ? "selected" : ""}`}
+                  onClick={() =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      category: isSelected
+                        ? prev.category.filter((c) => c !== key)
+                        : [...prev.category, key],
+                    }))
+                  }
+                >
+                  {cat}
+                </div>
+              );
+            })}
+          </div>
+
           <select
             name="priceRange"
             value={filters.priceRange}
             onChange={handleFilterChange}
           >
             <option value="">Price Range</option>
-            <option value="0-50">$0 - $50</option>
-            <option value="51-150">$51 - $150</option>
-            <option value="151+">$151+</option>
+            <option value="0-10000">0 FCFA - 10,000 FCFA</option>
+            <option value="11000-30000">11,000FCFA - 30,000 FCFA</option>
+            <option value="30000+">30,000 FCFA</option>
           </select>
 
-          <select
-            name="quantity"
-            value={filters.quantity}
-            onChange={handleFilterChange}
-          >
-            <option value="">quantity</option>
-            <option value="0-50">0kg - 50kg</option>
-            <option value="51-150">51kg - 150kg</option>
-            <option value="151+">kg151+</option>
-          </select>
+          <button className="find" onClick={() => console.log(filters)}>
+            Find
+          </button>
         </section>
 
         <hr className="divider" />
 
+        {/* Sell Form */}
         <section className="sell-section">
-          <h2>Sell Your Product</h2>
+          <h2>Request For Waste</h2>
           <form onSubmit={handleAddProduct}>
             <input
               type="text"
+              name="name"
               placeholder="Product name"
               value={newProduct.name}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, name: e.target.value })
-              }
+              onChange={handleInputChange}
               required
             />
             <input
               type="text"
+              name="specs"
               placeholder="Specifications"
               value={newProduct.specs}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, specs: e.target.value })
-              }
+              onChange={handleInputChange}
               required
             />
             <input
               type="number"
+              name="price"
               placeholder="Price ($)"
-              value={newProduct.price}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, price: e.target.value })
-              }
-              required
               min="0"
+              value={newProduct.price}
+              onChange={handleInputChange}
+              required
             />
             <input
               type="url"
+              name="image"
               placeholder="Image URL"
               value={newProduct.image}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, image: e.target.value })
-              }
+              onChange={handleInputChange}
             />
             <button type="submit">List Product</button>
           </form>
         </section>
       </aside>
 
+      {/* Product Grid */}
       <main className="product-grid">
-        {filteredProducts.map((product) => (
-          <article key={product.id} className="product-card">
-            <img
-              src={product.image}
-              alt={product.name}
-              onError={(e) =>
-                (e.target.src = "https://via.placeholder.com/250")
-              }
-              loading="lazy"
-            />
-            <div className="card-body">
-              <h3>{product.name}</h3>
-              <p>{product.specs}</p>
-              <div className="price">${product.price.toFixed(2)}</div>
-            </div>
-          </article>
-        ))}
+        {filteredProducts.length === 0 ? (
+          <p className="empty-state">No products match your search.</p>
+        ) : (
+          filteredProducts.map((product) => (
+            <article key={product.id} className="product-card">
+              <img
+                src={product.image}
+                alt={product.name}
+                loading="lazy"
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/250";
+                }}
+              />
+              <div className="card-body">
+                <h3>{product.name}</h3>
+                <p>{product.specs}</p>
+                <div className="price">${product.price.toFixed(2)}</div>
+              </div>
+            </article>
+          ))
+        )}
       </main>
     </div>
   );

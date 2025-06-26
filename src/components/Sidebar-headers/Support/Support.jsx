@@ -7,8 +7,9 @@ export default function Support() {
   const developers = [
     {
       id: 1,
-      name: "EBIMBE EKONGOLO",
-      role: "Frontend Developer",
+      name: "Nkeng Kundu Asong Frank",
+      role: "Srum Master",
+      role: "Fullstack Developer",
       url: "1.png",
       description:
         "Passionate about building intuitive and responsive user interfaces with React.",
@@ -16,6 +17,7 @@ export default function Support() {
     {
       id: 2,
       name: "Nindjio Abraham",
+      role: "System Architect",
       role: "Fullstack Developer",
       url: "2.png",
       description:
