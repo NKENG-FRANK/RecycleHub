@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import "./Tutorials.css";
 import { FaCamera } from "react-icons/fa";
 import HomePage from "../../Home/HomePage";
@@ -17,6 +17,21 @@ const Tutorial = () => {
     uploadedFileType: "",
   });
 
+  const imageInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  // Cleanup object URLs
+  useEffect(() => {
+    return () => {
+      tutorials.forEach((tut) => {
+        if (tut.imageUrl?.startsWith("blob:"))
+          URL.revokeObjectURL(tut.imageUrl);
+        if (tut.uploadedFile && tut.uploadedFile.preview)
+          URL.revokeObjectURL(tut.uploadedFile.preview);
+      });
+    };
+  }, [tutorials]);
+
   const toggleChoice = useCallback((choice) => {
     setSelectedChoices((prev) =>
       prev.includes(choice)
@@ -27,43 +42,41 @@ const Tutorial = () => {
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
-    setNewTutorial((prev) => ({ ...prev, [name]: value }));
+    setNewTutorial((prev) => ({ ...prev, [name]: value.trimStart() }));
   }, []);
 
   const handleImageUpload = useCallback((e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const imageUrl = URL.createObjectURL(file);
-    setNewTutorial((prev) => ({
-      ...prev,
-      imageUrl,
-    }));
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setNewTutorial((prev) => ({ ...prev, imageUrl }));
+    }
   }, []);
 
   const handleFileUpload = useCallback((e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files?.[0];
+    if (file) {
+      const type = file.type.includes("video")
+        ? "video"
+        : file.type.includes("text")
+        ? "text"
+        : file.type.includes("pdf")
+        ? "pdf"
+        : "other";
 
-    const type = file.type.includes("video")
-      ? "video"
-      : file.type.includes("text")
-      ? "text"
-      : file.type.includes("pdf")
-      ? "pdf"
-      : "other";
-
-    setNewTutorial((prev) => ({
-      ...prev,
-      uploadedFile: file,
-      uploadedFileType: type,
-    }));
+      file.preview = URL.createObjectURL(file);
+      setNewTutorial((prev) => ({
+        ...prev,
+        uploadedFile: file,
+        uploadedFileType: type,
+      }));
+    }
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { title, description, imageUrl } = newTutorial;
+
     if (!title || !description || !imageUrl) {
       alert("Please fill in all required fields.");
       return;
@@ -83,20 +96,20 @@ const Tutorial = () => {
   };
 
   const toggleSeeMore = (id) => {
-    setShowFile((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setShowFile((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
     <div className="Tutorial">
-      {/* Sidebar */}
       <HomePage />
       <aside className="left-panel">
         <section>
           <h1>Search Tutorial</h1>
-          <input type="text" placeholder="Input category" />
+          <input
+            type="text"
+            placeholder="Input category"
+            aria-label="Search category"
+          />
           <div className="suggestion">
             {CATEGORY_OPTIONS.map((name) => (
               <div
@@ -105,6 +118,8 @@ const Tutorial = () => {
                   selectedChoices.includes(name) ? "selected" : ""
                 }`}
                 onClick={() => toggleChoice(name)}
+                role="button"
+                tabIndex={0}
               >
                 {name}
               </div>
@@ -117,7 +132,6 @@ const Tutorial = () => {
 
         <hr className="divider" />
 
-        {/* Add Tutorial Form */}
         <section className="Add-tutorial">
           <form className="Tuto-form" onSubmit={handleSubmit}>
             <h2>Add Tutorial</h2>
@@ -129,6 +143,7 @@ const Tutorial = () => {
               className="Title"
               value={newTutorial.title}
               onChange={handleInputChange}
+              required
             />
             <input
               type="text"
@@ -137,12 +152,12 @@ const Tutorial = () => {
               className="description"
               value={newTutorial.description}
               onChange={handleInputChange}
+              required
             />
 
-            {/* Image Upload */}
             <label className="file-upload-label upload-image-label">
               <input
-                id="article-image-upload"
+                ref={imageInputRef}
                 type="file"
                 className="file-input"
                 accept="image/*"
@@ -151,9 +166,7 @@ const Tutorial = () => {
               <button
                 type="button"
                 className="file upload-image-button"
-                onClick={() =>
-                  document.getElementById("article-image-upload").click()
-                }
+                onClick={() => imageInputRef.current?.click()}
               >
                 <FaCamera style={{ marginRight: 8 }} /> Upload Image
               </button>
@@ -162,10 +175,9 @@ const Tutorial = () => {
               <p className="uploaded-image-name">Image uploaded</p>
             )}
 
-            {/* File Upload */}
             <label className="file-upload-label">
               <input
-                id="file-upload"
+                ref={fileInputRef}
                 type="file"
                 className="file-input"
                 accept="video/*, text/*, application/pdf"
@@ -174,7 +186,7 @@ const Tutorial = () => {
               <button
                 type="button"
                 className="file"
-                onClick={() => document.getElementById("file-upload").click()}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Upload File
               </button>
@@ -192,7 +204,6 @@ const Tutorial = () => {
         </section>
       </aside>
 
-      {/* Main Content */}
       <main className="main-content">
         {tutorials.map((tutorial) => (
           <div key={tutorial.id} className="tutorial-card">
@@ -218,7 +229,7 @@ const Tutorial = () => {
                 {tutorial.uploadedFileType === "video" && (
                   <video controls width="100%">
                     <source
-                      src={URL.createObjectURL(tutorial.uploadedFile)}
+                      src={tutorial.uploadedFile.preview}
                       type={tutorial.uploadedFile.type}
                     />
                   </video>
@@ -226,7 +237,7 @@ const Tutorial = () => {
                 {(tutorial.uploadedFileType === "text" ||
                   tutorial.uploadedFileType === "pdf") && (
                   <iframe
-                    src={URL.createObjectURL(tutorial.uploadedFile)}
+                    src={tutorial.uploadedFile.preview}
                     width="100%"
                     height="300"
                     title="Tutorial File"
