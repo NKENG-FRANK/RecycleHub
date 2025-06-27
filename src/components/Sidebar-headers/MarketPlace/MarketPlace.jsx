@@ -24,6 +24,8 @@ function ProductCard({product = (new Entity.Request).toObject()}) {
         <h3>{product.name}</h3>
         <p>{product.description}</p>
         <div className="price">{product.amount.toFixed(2)} FCFA per {product.unit}</div>
+        <br/>
+        <p>{product.user.contact}</p>
       </div>
     </article>
   )
