@@ -38,7 +38,8 @@ function LandingPage() {
 
                 <button className="start-btn" onClick={onGetStarted}>
                   Get Started
-                </button>              
+                </button>
+              </div>
             </div>
 
             <div
