@@ -1,19 +1,49 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./MarketPlace.css";
 import HomePage from "../../Home/HomePage";
+import Logo from "../../../assets/logo.png";
+import * as API from "../../../api";
+import * as Entity from "../../../entity";
 
-const CATEGORY_OPTIONS = ["Electronics", "Organic", "Plastic", "Metal"];
+// const CATEGORY_OPTIONS = ["Electronics", "Organic", "Plastic", "Metal"];
 const PRICE_RANGES = ["0-50", "51-150", "151+"];
 const QUANTITIES = ["0-50", "51-150", "151+"];
+
+function ProductCard({product = (new Entity.Request).toObject()}) {
+  return (
+    <article className="product-card">
+      <img
+        src={Logo}
+        alt={product.name}
+        loading="lazy"
+        onError={(e) => {
+          e.target.src = "https://via.placeholder.com/250";
+        }}
+      />
+      <div className="card-body">
+        <h3>{product.name}</h3>
+        <p>{product.description}</p>
+        <div className="price">{product.amount.toFixed(2)} FCFA per {product.unit}</div>
+      </div>
+    </article>
+  )
+}
 
 const MarketPlace = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchProcessing, setSearchProcessing] = useState(false)
+  const [CATEGORY_OPTIONS, setCategories] = useState([])
 
   const [filters, setFilters] = useState({
     category: [],
     priceRange: "",
   });
+
+  const handleSearch = useCallback(() => {
+    setSearchProcessing(true)
+    API.Request.search(searchTerm, filters.category).then(setProducts).catch().finally(() => setSearchProcessing(false))
+  }, [searchTerm, filters])
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -50,16 +80,20 @@ const MarketPlace = () => {
     [newProduct]
   );
 
-  const filteredProducts = products.filter((product) => {
-    const nameMatch = product.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const categoryMatch =
-      filters.category.length === 0 ||
-      filters.category.includes(product.category?.toLowerCase());
+  // const filteredProducts = products.filter((product) => {
+  //   const nameMatch = product.name
+  //     .toLowerCase()
+  //     .includes(searchTerm.toLowerCase());
+  //   const categoryMatch =
+  //     filters.category.length === 0 ||
+  //     filters.category.includes(product.category?.toLowerCase());
 
-    return nameMatch && categoryMatch;
-  });
+  //   return nameMatch && categoryMatch;
+  // });
+
+  useEffect(() => {
+      API.Categories.read().then(setCategories)
+    }, [])
 
   return (
     <div className="marketplace">
@@ -79,13 +113,13 @@ const MarketPlace = () => {
           />
 
           <div className="suggestion">
-            {["Electronics", "Organic", "Plastic", "Metal"].map((cat) => {
-              const key = cat.toLowerCase();
+            {CATEGORY_OPTIONS.map((cat, index) => {
+              const key = cat.id;
               const isSelected = filters.category.includes(key);
 
               return (
                 <div
-                  key={cat}
+                  key={index}
                   className={`choice ${isSelected ? "selected" : ""}`}
                   onClick={() =>
                     setFilters((prev) => ({
@@ -96,7 +130,7 @@ const MarketPlace = () => {
                     }))
                   }
                 >
-                  {cat}
+                  {cat.name}
                 </div>
               );
             })}
@@ -113,8 +147,8 @@ const MarketPlace = () => {
             <option value="30000+">30,000 FCFA</option>
           </select>
 
-          <button className="find" onClick={() => console.log(filters)}>
-            Find
+          <button className="find" onClick={handleSearch}>
+            {searchProcessing ? "Searching..." : "Search"}
           </button>
         </section>
 
@@ -163,26 +197,10 @@ const MarketPlace = () => {
 
       {/* Product Grid */}
       <main className="product-grid">
-        {filteredProducts.length === 0 ? (
+        {products.length === 0 ? (
           <p className="empty-state">No products match your search.</p>
         ) : (
-          filteredProducts.map((product) => (
-            <article key={product.id} className="product-card">
-              <img
-                src={product.image}
-                alt={product.name}
-                loading="lazy"
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/250";
-                }}
-              />
-              <div className="card-body">
-                <h3>{product.name}</h3>
-                <p>{product.specs}</p>
-                <div className="price">${product.price.toFixed(2)}</div>
-              </div>
-            </article>
-          ))
+          products.map((product, index) => (<ProductCard product={product} key={index} />))
         )}
       </main>
     </div>
