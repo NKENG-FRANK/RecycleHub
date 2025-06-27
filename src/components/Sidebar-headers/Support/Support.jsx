@@ -8,52 +8,56 @@ export default function Support() {
     {
       id: 1,
       name: "Nkeng Kundu Asong Frank",
-      role: "Srum Master",
-      role: "Fullstack Developer",
-      url: "1.png",
+      role: "Scrum Master",
+      role2: "Fullstack Developer",
+      url: "nkeng.jpg",
       description:
-        "Passionate about building intuitive and responsive user interfaces with React.",
+        "Passionate about building intuitive and responsive user interfaces with React. Love developing ground-breaking solutions in Python and Node.js.",
     },
     {
       id: 2,
       name: "Nindjio Abraham",
       role: "System Architect",
-      role: "Fullstack Developer",
-      url: "2.png",
+      role2: "Fullstack Developer",
+      url: "wakanda.jpg",
       description:
-        "Expert in full stack architecture, integrating frontend and backend systems seamlessly.",
+        "Expert in full stack architecture, integrating frontend and backend systems seamlessly. Proficient in React, Node.js, and Python.",
     },
     {
       id: 3,
-      name: "Mbele Tim",
-      role: "Backend Developer",
-      url: "3.png",
-      description:
-        "Loves optimizing APIs and managing server-side logic for scalable applications.",
-    },
-    {
-      id: 4,
-      name: "Clarisse N.",
-      role: "UI/UX Designer",
-      url: "4.png",
+      name: "Ebimbe Ekongolo Frederic Frantz",
+      role: "Frontend Developer",
+      role2: "Product Owner",
+      url: "ebimbe.jpg",
       description:
         "Designs delightful user experiences and ensures visual consistency across the platform.",
     },
     {
-      id: 5,
-      name: "Jean K.",
-      role: "Mobile Developer",
-      url: "5.png",
+      id: 4,
+      name: "Teko Blaise Atim",
+      role: "Backend Developer",
+      role2: "REST API Manager",
+      url: "bless.jpg",
       description:
-        "Focuses on mobile responsiveness and native app development for all platforms.",
+        "Loves optimizing APIs and managing server-side logic for scalable applications.",
+    },
+    {
+      id: 5,
+      name: "Noumbissi Yamdjeuson Stanley Derek",
+      role: "Frontend Developer",
+      role2: "Mobile Developer",
+      url: "derek.jpg",
+      description:
+        "Focuses on responsive design and native app development for all platforms.",
     },
     {
       id: 6,
-      name: "Awa Diallo",
-      role: "QA Engineer",
-      url: "6.png",
+      name: "Bayiha Hesed Charis",
+      role: "Low-Level Engineer",
+      role2: "QA Specialist",
+      url: "charis.jpg",
       description:
-        "Ensures that every feature is tested, verified, and bug-free before release.",
+        "Ensures every feature is tested, verified, and bug-free before release.",
     },
   ];
 
@@ -76,6 +80,7 @@ export default function Support() {
               key={dev.id}
               name={dev.name}
               role={dev.role}
+              role2={dev.role2}
               image={dev.url}
               description={dev.description}
             />
